@@ -18,28 +18,43 @@ import java.util.ArrayList;
 public class ListHeroAdapter extends RecyclerView.Adapter<ListHeroAdapter.ListViewHolder> {
     private ArrayList<Hero> listHero;
 
-    public ListHeroAdapter(ArrayList<Hero> list){
+    private OnItemClickCallback onItemClickCallback;
+
+    public ListHeroAdapter(ArrayList<Hero> list) {
 
         this.listHero = list;
     }
 
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback;
+    }
+
+
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row_hero,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row_hero, viewGroup, false);
         return new ListViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull final ListViewHolder holder, int position) {
         Hero hero = listHero.get(position);
         Glide.with(holder.itemView.getContext())
                 .load(hero.getPhoto())
-                .apply(new RequestOptions().override(55,55))
+                .apply(new RequestOptions().override(55, 55))
                 .into(holder.imgPhoto);
 
         holder.tvName.setText(hero.getName());
         holder.tvFrom.setText(hero.getFrom());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onItemClickCallback.onItemClicked(listHero.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
@@ -47,9 +62,13 @@ public class ListHeroAdapter extends RecyclerView.Adapter<ListHeroAdapter.ListVi
         return listHero.size();
     }
 
+    public interface OnItemClickCallback {
+        void onItemClicked(Hero data);
+    }
+
     class ListViewHolder extends RecyclerView.ViewHolder {
         ImageView imgPhoto;
-        TextView tvName , tvFrom;
+        TextView tvName, tvFrom;
 
         ListViewHolder(View itemView) {
             super(itemView);
@@ -58,5 +77,6 @@ public class ListHeroAdapter extends RecyclerView.Adapter<ListHeroAdapter.ListVi
             tvFrom = itemView.findViewById(R.id.tv_item_from);
         }
     }
+
 
 }

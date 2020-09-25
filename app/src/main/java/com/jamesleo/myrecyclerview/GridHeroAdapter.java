@@ -21,6 +21,9 @@ public class GridHeroAdapter extends RecyclerView.Adapter<GridHeroAdapter.GridVi
         this.listHero = list;
     }
 
+    public static void setOnItemClickCallback(ListHeroAdapter.OnItemClickCallback onItemClickCallback) {
+    }
+
     @NonNull
     @Override
     public GridHeroAdapter.GridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
